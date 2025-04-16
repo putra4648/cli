@@ -2,28 +2,39 @@ package id.putra;
 
 import java.io.IOException;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 
+import id.putra.prompt.JsonPrompt;
+
 public class App {
     public static void main(String[] args) throws ParseException, StreamReadException, DatabindException, IOException {
-        Options options = new Options();
+        Terminal terminal = TerminalBuilder.terminal();
+        LineReader lineReader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .build();
 
-        options.addOption("pj", false, "extract json");
+        String menu = """
+                Choose menu:
+                1. jsx -> Json Extractorr
+                Select menu >
+                """;
 
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse(options, args);
+        JsonPrompt.init(lineReader);
 
-        if (cmd.hasOption("pj")) {
-            ParseJSON.read(
-                    "C:\\\\Users\\\\Putra\\\\Documents\\\\Project\\\\cli\\\\src\\\\main\\\\resources\\\\object.json");
-        }
+        String line = lineReader.readLine("Prompt> ");
+        System.out.println(line);
+
+        // if (cmd.hasOption("pj")) {
+        // ParseJSON.read(
+        // "C:\\\\Users\\\\Putra\\\\Documents\\\\Project\\\\cli\\\\src\\\\main\\\\resources\\\\object.json");
+        // }
 
     }
 }
